@@ -27,6 +27,12 @@ namespace PreventSetProxy
         {
             InitializeComponent();
 
+            var registry = OpenUserRegKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings", true);
+            if (registry != null && (int)registry.GetValue("ProxyEnable") != 0)
+            {
+                registry.SetValue("ProxyEnable", 0);
+            }
+
             monitor = new
             RegistryMonitor(RegistryHive.CurrentUser, @"Software\Microsoft\Windows\CurrentVersion\Internet Settings");
             monitor.RegChanged += new EventHandler(OnRegChanged);
